@@ -18,4 +18,4 @@ The transition for adding a new node with energy $W$ and edge energy $V$ (total 
 *   `new_sum2 = old_sum2 + 2 * old_sum1 * \Delta + old_cnt * \Delta^2`
 
 ## Related Problems
-*   [Day 1: Binary String Coloring and Energy Second Moment on Hypercube](../Day%201/problem_en.md)
+*   [Day 1: Binary String Coloring and Energy Second Moment on Hypercube](../Day%201/problem.md)
