@@ -14,7 +14,19 @@ The repository follows a highly standardized directory layout. Each day's practi
 Cpp-Daily-Excercises/
 ├── README.md               # Project documentation (this file)
 ├── .gitignore              # Git ignore rules (ignoring binaries, test outputs, etc.)
-└── Day 1/                  # Daily practice folder
+├── Day 1/                  # Daily practice folder
+    ├── problem.md          # The problem statement (in pure English with LaTeX)
+    ├── config.json         # Local judge configuration (time limit, memory limit, checker)
+    ├── solution.cpp        # (Optional) The accepted reference solution
+    └── testcases/          # Test cases for local evaluation
+        ├── 1/
+        │   ├── 1.in        # Test case 1: Input data
+        │   └── 1.ans       # Test case 1: Expected output
+        ├── 2/
+        │   ├── 2.in
+        │   └── 2.ans
+        └── ...
+└── Day 2/                  # Daily practice folder
     ├── problem.md          # The problem statement (in pure English with LaTeX)
     ├── config.json         # Local judge configuration (time limit, memory limit, checker)
     ├── solution.cpp        # (Optional) The accepted reference solution
