@@ -12,4 +12,4 @@ A bipartite graph is a graph whose vertices can be divided into two disjoint and
 *   **BFS/DFS Coloring**: The standard algorithm to check if a graph is bipartite. We start at an arbitrary node, color it 0, and color all its neighbors 1. If we encounter a neighbor that already has the same color as the current node, the graph is not bipartite. This runs in $O(N + M)$ time.
 
 ## Related Problems
-*   [Day 2: Bipartite Coloring and Component Counting](../Day%202/problem_en.md)
+*   [Day 2: Bipartite Coloring and Component Counting](../Day%202/problem.md)
