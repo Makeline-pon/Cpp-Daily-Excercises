@@ -15,4 +15,4 @@ Breadth-First Search (BFS) is a fundamental graph traversal algorithm. It starts
 *   Topological sorting (Kahn's algorithm).
 
 ## Related Problems
-*   [Day 2: Bipartite Coloring and Component Counting](../Day%202/problem_en.md)
+*   [Day 2: Bipartite Coloring and Component Counting](../Day%202/problem.md)
