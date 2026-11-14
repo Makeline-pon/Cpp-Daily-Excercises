@@ -1,142 +1,135 @@
-# Day 1: Binary Energy Moments
+# Day 1: Binary String Coloring and Energy Second Moment on Hypercube
 
 ## Problem Statement
+Given a $d$-dimensional hypercube graph $Q_d = (V, E)$, where the total number of nodes is $N = 2^d$. Nodes are numbered from $0$ to $N-1$. For any two nodes $u, v$, there is an undirected edge $(u, v) \in E$ if and only if their binary representations differ in exactly one bit. The distance $\text{dist}_G(u, v)$ between two nodes is defined as the number of differing bits in their binary representations (i.e., the Hamming distance).
 
-Let $G = (V, E)$ be an undirected graph with $N$ vertices and $M$ edges. Each vertex $i$ is assigned a $K$-bit binary string
+Each node $i \in V$ is assigned a length-$K$ binary string $\mathbf{s}_i = (s_{i,1}, s_{i,2}, \dots, s_{i,K})$, where $s_{i,k} \in \{0, 1\}$.
 
-$$
-s_i = (s_{i,1}, s_{i,2}, \ldots, s_{i,K}) \in \{0, 1\}^K.
-$$
+We need to assign values to all nodes satisfying the following three constraints:
 
-A string is **legal** if it contains no two consecutive $1$s. Formally, for every $1 \le j < K$, it is not the case that $s_{i,j} = s_{i,j+1} = 1$.
-
-For every vertex $i$ and bit $j$, a base energy $w_{i,j}$ is paid when $s_{i,j} = 1$. For every edge $(u,v) \in E$ with interaction weight $J_{u,v}$, an interaction energy
+1. **Local No-Consecutive-1 Constraint**:
+   For any node $i$ and any $k \in [1, K-1]$, adjacent positions cannot be both $1$. Formally:
 
 $$
-J_{u,v} \sum_{j=1}^{K} s_{u,j} s_{v,j}
+s_{i,k} \cdot s_{i,k+1} = 0
 $$
 
-is paid, and all interaction energies are multiplied by the global coupling factor $\lambda$. Thus the total energy of a configuration $S = (s_0, s_1, \ldots, s_{N-1})$ is
+2. **Long-range Parity Constraints**:
+   Given a distance threshold $D$ and $M$ parity rules.
+   The input provides $M$ lines, each containing a constraint. For a given dimension set $S_{uv} = \{k_1, \dots, k_L\}$ and target constant $P_{uv}$, it must satisfy:
 
 $$
-E(S) = \sum_{i=0}^{N-1} \sum_{j=1}^{K} w_{i,j} s_{i,j}
-+ \lambda \sum_{(u,v) \in E} J_{u,v} \sum_{j=1}^{K} s_{u,j} s_{v,j}.
+\bigoplus_{k \in S_{uv}} (s_{u,k} \land s_{v,k}) = P_{uv}
 $$
 
-In addition, $Q$ long-range parity constraints are given. For a vertex $i$, define its state parity as
+   where $\oplus$ denotes XOR and $\land$ denotes logical AND.
+   *Note: This constraint only takes effect if $\text{dist}_G(u, v) \le D$. The input guarantees that all provided constraint pairs satisfy this distance condition.*
+
+3. **Head-Tail Mirror Symmetry Constraint**:
+   Let node $0$ (binary all 0s) and node $N-1$ (binary all 1s) be the head and tail nodes of the graph. Their binary strings must satisfy central symmetry:
 
 $$
-p_i = s_{i,1} \oplus s_{i,2} \oplus \cdots \oplus s_{i,K},
+\forall k \in [1, K], \quad s_{0,k} = s_{N-1, K+1-k}
 $$
 
-where $\oplus$ denotes bitwise XOR. Each constraint is a triple $(u, v, P)$ requiring
+Define the global energy functional $E(\mathbf{S})$ as:
 
 $$
-p_u \oplus p_v = P.
+E(\mathbf{S}) = \sum_{i=0}^{N-1} \sum_{k=1}^K w_{i,k} \cdot s_{i,k} + \lambda \sum_{(u,v) \in E} J_{uv} \cdot \left( \sum_{k=1}^K s_{u,k} \cdot s_{v,k} \right)
 $$
 
-A configuration is **valid** if every vertex state is legal and all $Q$ parity constraints are satisfied. Compute the sum of squared energies over all valid configurations:
+where:
+- $w_{i,k}$ is the weight of node $i$ at dimension $k$.
+- $J_{uv}$ is the interaction weight of edge $(u, v)$.
+- $\lambda$ is the global coupling constant.
+
+Calculate the sum of the second moments of the energy over all valid configurations $\mathbf{S}$, i.e.:
 
 $$
-\text{Answer} = \sum_{\text{valid } S} E(S)^2 \bmod 998244353.
+\text{Answer} = \sum_{\mathbf{S} \in \mathcal{S}_{\text{valid}}} \left( E(\mathbf{S}) \right)^2 \pmod{998244353}
 $$
 
-The value $D$ in the input is the maximum Hamming distance allowed between the binary labels of the endpoints of a listed parity constraint. It is a promise about the input; it does not change the required computation.
+If no valid configuration exists, output $0$.
 
 ## Input Format
 
-- The first line contains four integers $N$, $K$, $D$, and $\lambda$.
-- The next $N$ lines each contain $K$ integers. The $i$-th of these lines lists $w_{i,1}, w_{i,2}, \ldots, w_{i,K}$.
-- The next line contains the integer $M$.
-- The next $M$ lines each contain three integers $u$, $v$, and $J_{u,v}$, describing an undirected edge. Vertices are numbered from $0$ to $N-1$.
-- The next line contains the integer $Q$.
-- The next $Q$ lines each contain three integers $u$, $v$, and $P$, describing one parity constraint.
+The first line contains four integers $N, K, D, \lambda$.
+Where $N = 2^d$ is guaranteed, $1 \le d \le 16$, $1 \le K \le 10$, $0 \le D \le d$, $0 \le \lambda \le 10^9$.
 
-The interaction graph is given explicitly by its edge list, so it may be a ring, a hypercube, or any other undirected graph.
+The second line contains $N \times K$ integers, providing $w_{i,k}$ in row-major order (node by node, then dimension by dimension).
+
+The next $N \cdot d / 2$ lines, each containing three integers $u, v, J_{uv}$, represent an undirected edge in the hypercube and its interaction weight. The input guarantees that exactly all edges in the hypercube graph $Q_d$ are given.
+
+The next line contains an integer $M$, representing the number of long-range parity constraints.
+The following $M$ lines each describe a constraint. The format is:
+$u, v, L, P, k_1, k_2, \dots, k_L$
+where $u, v$ are node indices, $L$ is the number of dimensions involved, $P$ is the parity constant, and $k_1, \dots, k_L$ are the specific dimension indices.
+If $L=1$, it is the simplified model (single-dimension constraint); if $L \ge 2$, it is the general model (set XOR constraint).
+
+The last line contains $K$ integers used to confirm the mirror mapping relationship (usually all 0s, representing the standard reverse mapping $k \to K+1-k$).
 
 ## Output Format
 
-Print a single integer: the sum of $E(S)^2$ over all valid configurations, modulo $998244353$.
+Output a single integer, representing the answer modulo $998244353$.
 
 ## Samples
 
 ### Sample 1
 
 **Input**
-
 ```text
-3 2 2 1
-1 2
-2 1
-1 1
-3
+2 2 1 1
+1 2 3 4 5 6 7 8
 0 1 1
-1 2 1
-2 0 1
-3
-0 1 0
-1 2 1
 0 2 1
+1 3 1
+2 3 1
+0
+0 0
 ```
-
 **Output**
-
 ```text
-54
+0
 ```
 
 ### Sample 2
 
 **Input**
-
 ```text
-3 2 0 2
-1 1
-2 3
-1 2
-3
-0 1 2
-1 2 1
-2 0 3
+4 3 2 2
+5 10 15 20 25 30 35 40 45 50 55 60
+0 1 5
+0 2 10
+1 3 15
+2 3 20
 0
+0 0 0
 ```
-
 **Output**
-
 ```text
-1506
+4280625
 ```
 
 ## Constraints and Hints
 
-The samples and the bundled local test cases use small ring-shaped graphs. The table below summarizes the parameter ranges of the full hypercube test family.
-
 | Parameter | Constraints | Description |
 | :--- | :--- | :--- |
-| $d$ (Hypercube dimension) | $1 \le d \le 16$ | Graph is a $d$-dimensional hypercube, node count $N = 2^d$ (up to $65536$). |
-| $K$ (State dimension) | $1 \le K \le 10$ | Binary string length. Valid states count $\le F_{K+2}$ (no consecutive $1$s). |
+| $d$ (Hypercube dimension) | $1 \le d \le 16$ | Graph is a $d$-dimensional hypercube, node count $N = 2^d$ (up to 65536). |
+| $K$ (State dimension) | $1 \le K \le 10$ | Binary string length. Valid states count $\le F_{K+2}$ (no consecutive 1s). |
 | $D$ (Distance threshold) | $0 \le D \le d$ | Only node pairs with Hamming distance $\le D$ have long-range constraints. |
 | $\lambda$ (Global coupling) | $0 \le \lambda \le 10^9$ | Global scaling factor for edge interactions, modulo $998244353$. |
-| $w_{i,k}$ (Node weight) | $1 \le w_{i,k} \le 10^4$ | Base energy when the $k$-th bit of node $i$ is $1$. |
-| $J_{uv}$ (Edge weight) | $1 \le J_{uv} \le 10^4$ | Interaction energy when both corresponding bits of $u, v$ are $1$. |
+| $w_{i,k}$ (Node weight) | $1 \le w_{i,k} \le 10^4$ | Base energy when the $k$-th bit of node $i$ is 1. |
+| $J_{uv}$ (Edge weight) | $1 \le J_{uv} \le 10^4$ | Interaction energy when both corresponding bits of $u, v$ are 1. |
 | $P_{uv}$ (Parity target) | $\in \{0, 1\}$ | Target XOR result for long-range constraints. |
-| Intermediate variables | $< 2^{63}$ | Use a $64$-bit integer (`long long`), and take the modulus after each step to avoid overflow. |
+| Intermediate variables | $< 2^{63}$ | Use 64-bit integer (`long long`), modulo after each step to avoid overflow. |
 | Final Answer | $\in [0, 998244353)$ | Sum of second moments of energy modulo $998244353$. |
 
-Additional guarantees:
-
-- $0 \le M \le 6 \times 10^5$ and $0 \le Q \le 2 \times 10^5$.
-- No edge is repeated, and no parity constraint is repeated.
-- The mathematical definition of $E(S)$ uses ordinary integers. When implementing the sum, reduce modulo $998244353$ after each addition and multiplication.
-
-### Algorithm Hints
-
-Since $N \le 65536$, brute force over all $2^{N \times K}$ global states is infeasible. The core idea is **state-compression DP utilizing the hypercube structure**:
-
-1. Precompute all valid binary states for a single node, filtering out illegal strings that contain consecutive $1$s.
-2. Exploit the structural properties of the hypercube, which is bipartite and whose nodes can be layered by the number of $1$s in their binary labels, to organize the DP transitions.
-3. During transitions, maintain `cnt` (the number of ways), `sum1` (the sum of energies), and `sum2` (the sum of squared energies). Use the expansion $(E+\Delta)^2 = E^2 + 2E\Delta + \Delta^2$ to accumulate the second moment.
-4. Finally, enforce all long-range parity constraints and any additional boundary conditions required by the graph family, discarding invalid configurations.
+**Algorithm Hints:**
+Since $N \le 65536$, brute force over $2^{N \times K}$ global states is infeasible. The core is **State Compression DP utilizing the hypercube structure**:
+1. Precompute all valid binary states for a single node (filtering out illegal strings with consecutive 1s).
+2. Exploit the structural properties of the hypercube (it's a bipartite graph, and nodes can be layered by the number of 1s in their binary representation) for DP transitions.
+3. During transitions, maintain `cnt` (number of ways), `sum1` (sum of energy), and `sum2` (sum of squared energy). Use the expansion of $(E+\Delta)^2$ to accumulate the second moment.
+4. Finally, validate the head-tail mirror constraint and long-range parity constraints to filter out invalid schemes.
 
 ## Difficulty
 
