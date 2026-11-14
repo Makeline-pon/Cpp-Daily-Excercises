@@ -1,0 +1,6 @@
+{
+  "name": "Day 2 Problem",
+  "timeLimit": 1000,
+  "memoryLimit": 256,
+  "checker": "diff"
+}
