@@ -92,5 +92,8 @@ The current structure is designed to be highly extensible. Future updates to thi
 
 This repository is intended for personal educational and competitive programming training purposes. All problem statements and test cases are generated and curated locally.
 
+## Quick Links
+- [Problem Archive](#) (Coming soon)
+- [Algorithm Topics Index](Topics.md)
 ---
 *Maintained by Makeline-pon. Focus on logic, optimize the process.*
