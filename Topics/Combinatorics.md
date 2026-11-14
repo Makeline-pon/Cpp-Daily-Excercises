@@ -22,7 +22,7 @@ In problems involving bitwise operations, combinatorial counting can be used to 
 *   **Parity Constraints**: When applying constraints like \(\bigoplus (s_{u,k} \land s_{v,k}) = P\), we often use dynamic programming or graph connectivity (e.g., DSU with parity) to count valid assignments.
 
 ## Related Problems
-*   [Day 1: Binary String Coloring and Energy Second Moment on Hypercube](../Day%201/problem_en.md)
+*   [Day 1: Binary String Coloring and Energy Second Moment on Hypercube](../Day%201/problem.md)
 
 ## Further Reading and Templates
 *   **Factorials & Inverses**: Precompute up to \(2 \times 10^6\) in \(O(N)\) time.
