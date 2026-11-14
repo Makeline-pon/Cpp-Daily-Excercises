@@ -18,4 +18,4 @@ A graph $G = (V, E)$ consists of a set of vertices $V$ and a set of edges $E$. G
 *   **Adjacency List**: An array of lists, where `adj[u]` stores all neighbors of $u$. It takes $O(V + E)$ space, suitable for sparse graphs. This is the most commonly used representation in competitive programming.
 
 ## Related Problems
-*   [Day 2: Bipartite Coloring and Component Counting](../Day%202/problem_en.md)
+*   [Day 2: Bipartite Coloring and Component Counting](../Day%202/problem.md)
