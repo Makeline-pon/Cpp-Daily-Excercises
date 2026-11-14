@@ -9,4 +9,4 @@ State Compression DP (often referred to as Bitmask DP) is a technique used when 
 *   **Valid State Filtering**: In problems requiring "no consecutive 1s", we can precompute all valid masks using `(mask & (mask << 1)) == 0`.
 
 ## Related Problems
-*   [Day 1: Binary String Coloring and Energy Second Moment on Hypercube](../Day%201/problem_en.md)
+*   [Day 1: Binary String Coloring and Energy Second Moment on Hypercube](../Day%201/problem.md)
