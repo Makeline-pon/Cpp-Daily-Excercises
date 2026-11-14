@@ -137,6 +137,7 @@ Since $N \le 65536$, brute force over $2^{N \times K}$ global states is infeasib
 
 ## Tags
 
-[![State Compression DP](https://img.shields.io/badge/State%20Compression%20DP-blue?style=flat-square)](../Topics/Bitmask_DP.md)
+[![Hypercube Graph](https://img.shields.io/badge/Hypercube%20Graph-brightgreen?style=flat-square)](../Topics/Hypercube.md)
+[![State Compression DP](https://img.shields.io/badge/State%20Compression%20DP-blue?style=flat-square)](../Topics/State_Compression_DP.md)
 [![Combinatorics](https://img.shields.io/badge/Combinatorics-purple?style=flat-square)](../Topics/Combinatorics.md)
-[![Energy Second Moment](https://img.shields.io/badge/Energy%20Second%20Moment-orange?style=flat-square)](../Topics/Moments.md)
+[![Moments](https://img.shields.io/badge/Energy%20Second%20Moment-orange?style=flat-square)](../Topics/Moments.md)
