@@ -61,8 +61,7 @@ If the graph becomes non-bipartite at any step, output `-1` and the program shou
 
 ## Difficulty
 
-**Difficulty: 1.30** - Hard (Normal+)
-
+**Difficulty: 0.65** - Easy+ / Normal-
 ## Tags
 
 [![Graph Theory](https://img.shields.io/badge/Graph%20Theory-brightgreen?style=flat-square)](../Topics/Graph_Theory.md)
