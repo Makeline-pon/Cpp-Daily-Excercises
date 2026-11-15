@@ -1,21 +1,22 @@
-# Day 2: Lexicographically Smallest Bipartite Coloring
+# Day 2: Dynamic Parity Network
 
 ## Problem Statement
 
-You are given an undirected graph $G = (V, E)$ with $N$ vertices and $M$ edges. The graph does not contain self-loops or multiple edges.
+You are given an initially empty undirected graph with \(N\) vertices, numbered from 0 to \(N-1\). You will receive \(M\) edge additions sequentially. Each edge addition is given as a pair of vertices $(u, v)$, indicating an undirected edge between \(u\) and \(v\).
 
-You need to assign a color $c_i \in \{0, 1\}$ to each vertex $i \in V$ satisfying the following conditions:
-1. The graph must be **properly 2-colored** (i.e., for every edge $(u, v) \in E$, $c_u \neq c_v$). If the graph cannot be properly 2-colored, output `-1`.
-2. The color assignment must be **lexicographically smallest**. Since the colors are binary, we consider the sequence of colors $(c_0, c_1, \dots, c_{N-1})$ as a binary number. You need to minimize this binary number. (For example, a sequence starting with $0$ is smaller than one starting with $1$).
+After each edge addition, you need to answer:
+1. Is the current graph bipartite? If it is **not** bipartite, output `-1` and terminate the program immediately.
+2. If it is bipartite, output the number of **connected components** in the current graph.
 
 ## Input Format
 
-The first line contains two integers $N$ and $M$.
-The next $M$ lines each contain two integers $u$ and $v$, representing an undirected edge between vertex $u$ and vertex $v$.
+The first line contains two integers \(N\) and \(M\), representing the number of vertices and the number of edge additions.
+The next \(M\) lines each contain two integers \(u\) and \(v\), representing an undirected edge added between \(u\) and \(v\).
 
 ## Output Format
 
-Output $N$ space-separated integers $c_0, c_1, \dots, c_{N-1}$, representing the lexicographically smallest valid coloring. If no valid coloring exists, output `-1`.
+Output \(M\) lines. The \(i\)-th line is the answer after the \(i\)-th edge addition.
+If the graph becomes non-bipartite at any step, output `-1` and the program should stop further processing.
 
 ## Samples
 
@@ -23,56 +24,47 @@ Output $N$ space-separated integers $c_0, c_1, \dots, c_{N-1}$, representing the
 
 **Input**
 ~~~text
-4 3
+4 4
+0 1
 1 2
+0 2
 2 3
-3 0
 ~~~
 
 **Output**
 ~~~text
-0 0 1 0
+3
+2
+-1
 ~~~
 
 **Explanation**
-The graph is a path 1-2-3-0. The valid colorings are [0, 0, 1, 0] (starting with 0) and [1, 1, 0, 1] (starting with 1). The lexicographically smallest is [0, 0, 1, 0].
-
-### Sample 2
-
-**Input**
-~~~text
-3 3
-0 1
-1 2
-2 0
-~~~
-
-**Output**
-~~~text
--1
-~~~
+- After adding 0-1: 1 edge, bipartite. Components = 3.
+- After adding 1-2: 2 edges, path 0-1-2, bipartite. Components = 2.
+- After adding 0-2: triangle 0-1-2 formed, which is an odd cycle, not bipartite. Output -1 and stop.
 
 ## Constraints and Hints
 
 | Parameter | Constraints | Description |
 | :--- | :--- | :--- |
-| $N$ | $1 \le N \le 2 \times 10^5$ | Number of vertices. |
-| $M$ | $0 \le M \le 2 \times 10^5$ | Number of edges. |
+| \(N\) (Number of vertices) | \(1 \le N \le 2 \times 10^5\) | Number of vertices. |
+| \(M\) (Number of edges) | \(1 \le M \le 2 \times 10^5\) | Number of additions. |
+| \(u, v\) | \(0 \le u, v < N\) | Edge endpoints. |
 
 **Algorithm Hints:**
-1. The graph may consist of multiple connected components.
-2. To make the color array lexicographically smallest, we should prioritize minimizing the color of the vertex with the smallest index.
-3. For a connected component, once the color of one vertex is fixed, the colors of all other vertices in the component are uniquely determined (up to swapping 0 and 1).
-4. Therefore, for each connected component, let the vertex with the smallest index in that component be the root. We should try to assign color $0$ to this root. If it leads to a valid 2-coloring, we keep it; otherwise, we assign color $1$ to the root. (Notice that if the component is isolated, we just assign 0).
-5. Use BFS/DFS to traverse and check.
+1. Do **not** run BFS/DFS after each addition; the time complexity would be \(O(M(N+M))\), which will cause Time Limit Exceeded (TLE).
+2. Use a **Disjoint Set Union (DSU) with Parity** to maintain the relative color of each vertex compared to its component's root.
+3. Maintain an array `dist[x]` representing the parity of the path from \(x\) to its root. Use path compression to update `dist[x]`.
+4. When adding an edge $(u, v)$:
+    - Find their roots. If they are in the same component, check if the parity is consistent.
+    - If they are in different components, merge them and update the parity accordingly. The number of components decreases by 1.
 
 ## Difficulty
 
-**Difficulty: 1.20** - Normal
+**Difficulty: 1.30** - Hard (Normal+)
 
 ## Tags
 
 [![Graph Theory](https://img.shields.io/badge/Graph%20Theory-brightgreen?style=flat-square)](../Topics/Graph_Theory.md)
 [![Bipartite Graph](https://img.shields.io/badge/Bipartite%20Graph-blue?style=flat-square)](../Topics/Bipartite_Graph.md)
-[![Greedy Algorithm](https://img.shields.io/badge/Greedy-orange?style=flat-square)](../Topics/Greedy.md)
-[![Breadth-First Search](https://img.shields.io/badge/BFS-purple?style=flat-square)](../Topics/BFS.md)
+[![Disjoint Set Union](https://img.shields.io/badge/Disjoint%20Set%20Union-red?style=flat-square)](../Topics/DSU.md)
